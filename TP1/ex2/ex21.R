@@ -5,8 +5,14 @@ Dp <- diag(n) * 1 / n
 V <- t(X) %*% Dp %*% X
 tmp <- eigen(V)
 L <- diag(tmp$values)
+cat("\nValeurs propres\n")
+prmatrix(L)
 U <- tmp$vectors
+cat("\nVecteurs propres\n")
+prmatrix(U)
 C <- X %*% U
+cat("\nComposantes principales\n")
+prmatrix(C)
 
 png('individus.png')
 plot(C[, 1], C[, 2])
@@ -19,3 +25,9 @@ dev.off()
 K1 <- C[, 1] %*% t(U[, 1])
 K2 <- K1 + C[, 2] %*% t(U[, 2])
 K3 <- K2 + C[, 3] %*% t(U[, 3])
+cat("\n K1 <- C[, 1] %*% t(U[, 1])\n")
+prmatrix(K1)
+cat("\n K2 <- K1 + C[, 2] %*% t(U[, 2])\n")
+prmatrix(K2)
+cat("\n K3 <- K2 + C[, 3] %*% t(U[, 3])\n")
+prmatrix(K3)
