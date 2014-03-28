@@ -14,11 +14,11 @@ C <- X %*% U
 cat("\nComposantes principales\n")
 prmatrix(C)
 
-png('individus.png')
+png("plotIndividus.png", width = 400, height = 400)
 plot(C[, 1], C[, 2])
 dev.off()
 
-png('variables.png')
+png("plotVariables.png", width = 400, height = 400)
 plot(C[1,], C[2,])
 dev.off()
 

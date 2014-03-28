@@ -15,7 +15,7 @@ babies$smoke <- factor(c("NonSmoking", "Smoking", "NonSmoking", "NonSmoking")
                       [babies$smoke + 1])
 babies$education <- factor(babies$education, ordered = T)
 
-png("boxplotPoids.png")
+png("boxplotPoids.png", width = 400, height = 400)
 boxplot(babies[babies$smoke == "Smoking", ]$bwt, 
         babies[babies$smoke == "NonSmoking", ]$bwt,
         notch = T, names = c("Mères fumeuses", "Mères non fumeuses"),
@@ -24,7 +24,7 @@ title("Boxplot du poids des nouveaux-nés en onces
       pour les mères fumeuses et non fumeuses")
 dev.off()
 
-png("boxplotGestation.png")
+png("boxplotGestation.png", width = 400, height = 400)
 boxplot(babies[babies$smoke == "Smoking", ]$gestation,
         babies[babies$smoke == "NonSmoking", ]$gestation,
         notch = T, names = c("Mères fumeuses", "Mères non fumeuses"),
@@ -34,14 +34,22 @@ title("Boxplot du temps de gestation en jours
 dev.off()
 
 table <- table(babies$smoke, babies$education)
-png("barplotEducation.png")
+educationCategories = c("<8th grade", "8th<grade<12th", "HS graduate",
+                     "HS + trade", "Some college", "College graduate", 
+                     "Trade school")
+png("barplotEducation.png", width = 600, height = 400)
 barplot(table, main = "Repartition des meres fumeuses et non fumeuses
         en fonction de leur niveau d'education", 
         col = c("darkblue", "skyblue"),
         legend = c("Meres non fumeuses", "Meres fumeuses"),
-        names.arg = c("<8th grade", "8th<grade<12th", "HS graduate",
-                     "HS + trade", "Some college", "College graduate", 
-                     "Trade school"),
+        names.arg = educationCategories,
         xlab = "Niveau d'education", ylab = "Effectif de meres",
         ylim = c(0,500), font.lab = 2)
 dev.off()
+
+#chi2
+smokingEducationTable <- table(babies$education, babies$smoke)
+smokingEducationMatrix <- as.matrix(smokingEducationTable)
+rownames(smokingEducationMatrix) <- educationCategories
+print(smokingEducationMatrix)
+print(chisq.test(smokingEducationMatrix))
