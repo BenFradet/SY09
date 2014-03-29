@@ -22,35 +22,33 @@ prmatrix(COR)
 CTR <- (1 / n) * C^2 %*% diag(1 / diag(L))
 cat("\nContributions individu/axe\n")
 prmatrix(CTR)
-XCentreeReduite <- scale(X, center = T, scale = T)
-D <- 1 / n * t(XCentreeReduite) %*%  XCentreeReduite
-cat("\nRepresentation des variables\n")
+D <- cor(X, C)
+cat("\nRepresentation des variables/Matrice des correlations\n")
 print(D)
 
-png("plotVariables.png", width = 400, height = 400)
+png("plotVariablesAxe12.png", width = 400, height = 450)
 plot(-1:1, -1:1,
      type = "n",
      xlab = "Axe factoriel 1",
      ylab = "Axe factoriel 2")
-text(D[, 1], D[, 2], c(1, 2, 3))
-abline(h = 0, v = 0)
-curve(sqrt(1 - x^2), -1, 1, add = T)
-curve(-sqrt(1 - x^2), -1, 1, add = T)
+text(D[, 1], D[, 2], c(1, 2, 3), col = "red")
+abline(h = 0, v = 0, col = "blue")
+curve(sqrt(1 - x^2), -1, 1, add = T, col = "blue")
+curve(-sqrt(1 - x^2), -1, 1, add = T, col = "blue")
 dev.off()
-cat("plotVariables.png sauvegardee\n")
+cat("\nplotVariablesAxe12.png sauvegardee\n")
 
-#png("plotVariablesAxe13.png", width = 400, height = 400)
-#plot(-1:1, -1:1,
-#     type = "n",
-#     xlab = "Axe factoriel 1",
-#     ylab = "Axe factoriel 3")
-#text(D[, 1], D[, 3], c(1, 2, 3))
-#abline(h = 0)
-#abline(v = 0)
-#curve(sqrt(1 - x^2), -1, 1, add = T)
-#curve(-sqrt(1 - x^2), -1, 1, add = T)
-#dev.off()
-#cat("plotVariablesAxe13.png sauvegardee\n")
+png("plotVariablesAxe13.png", width = 400, height = 450)
+plot(-1:1, -1:1,
+     type = "n",
+     xlab = "Axe factoriel 1",
+     ylab = "Axe factoriel 3")
+text(D[, 1], D[, 3], c(1, 2, 3), col = "red")
+abline(h = 0, v = 0, col = "blue")
+curve(sqrt(1 - x^2), -1, 1, add = T, col = "blue")
+curve(-sqrt(1 - x^2), -1, 1, add = T, col = "blue")
+dev.off()
+cat("plotVariablesAxe13.png sauvegardee\n")
 
 png("plotIndividus.png", width = 400, height = 400)
 plot(C[, 1], C[, 2], 
@@ -61,6 +59,16 @@ text(C[, 1], C[, 2], c(1, 2, 3, 4))
 abline(h = 0, v = 0)
 dev.off()
 cat("plotIndividus.png sauvegardee\n")
+
+#png("plotIndividusAxe13.png", width = 400, height = 400)
+#plot(C[, 1], C[, 2], 
+#     type = "n",
+#     xlab = "Axe factoriel 1",
+#     ylab = "Axe factoriel 2")
+#text(C[, 1], C[, 2], c(1, 2, 3, 4))
+#abline(h = 0, v = 0)
+#dev.off()
+#cat("plotIndividusAxe13.png sauvegardee\n")
 
 K1 <- C[, 1] %*% t(U[, 1])
 K2 <- K1 + C[, 2] %*% t(U[, 2])
