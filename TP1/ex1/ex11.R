@@ -41,12 +41,13 @@ table <- table(babies$smoke, babies$education)
 educationCategories = c("<8th grade", "8th<grade<12th", "HS graduate",
                      "HS + trade", "Some college", "College graduate", 
                      "Trade school")
-png("barplotEducation.png", width = 600, height = 400)
+png("barplotEducation.png", width = 650, height = 400)
 barplot(table, main = "Repartition des meres fumeuses et non fumeuses
         en fonction de leur niveau d'education", 
         col = c("darkblue", "skyblue"),
         legend = c("Meres non fumeuses", "Meres fumeuses"),
         names.arg = educationCategories,
+        cex.names = 0.8,
         xlab = "Niveau d'education", 
         ylab = "Effectif de meres",
         ylim = c(0,500), 

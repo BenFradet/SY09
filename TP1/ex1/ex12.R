@@ -5,22 +5,38 @@ variableNames <- c("Fontal Lobe\nSize", "Rear\nWidth", "Carapace\nLength",
                 "Carapace\nWidth", "Body\nDepth")
 png("sexesGraphMatriciel.png", width = 800, height = 800)
 plot(crabs[, 4:8], 
-     bg = c("blue", "red")[crabs[, 2]],
+     col = c("deeppink", "blue")[crabs[, 2]],
      pch = 24,
      main = "Graphique matriciel des caracteristiques morphologiques
      de 200 crabes en fonction de leur sexe",
      labels = variableNames)
+par(xpd = T)
+legend("topright", 
+       c("Male", "Femelle"),
+       col = c("blue", "deeppink"),
+       cex = 0.8,
+       horiz = T,
+       pch = 24)
+par(xpd = F)
 dev.off()
 cat("sexesGraphMatriciel.png sauvegardee\n")
 
 #graph especes
 png("speciesGraphMatriciel.png", width = 800, height = 800)
+par(xpd = T)
 plot(crabs[, 4:8],
-     bg = c("blue", "orange")[crabs[, 1]],
+     col = c("blue", "orange")[crabs[, 1]],
      pch = 24,
      main = "Graphique matriciel des caracteristiques morphologiques
      de 200 crabes en fonction de leur espece",
      labels = variableNames)
+legend("topright",
+       c("Espece bleue", "Espece orange"),
+       col = c("blue", "orange"),
+       cex = 0.8,
+       horiz = T,
+       pch = 24)
+par(xpd = F)
 dev.off()
 cat("speciesGraphMatriciel.png sauvegardee\n")
 
