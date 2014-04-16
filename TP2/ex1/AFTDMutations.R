@@ -15,9 +15,12 @@ cat("AFTDMutations.png sauvegardee\n")
 
 library(MASS)
 shepard <- Shepard(dist(M), cmdscale(dist(M)))
-png("ShepardMutations.png", width = 450, height = 450)
-plot(shepard$x, shepard$y)
-points(shepard$x, shepard$yf, col = "red")
+png("ShepardMutations.png", width = 600, height = 450)
+plot(shepard, 
+     pch = 1, 
+     xlab = "Dissimilarité", 
+     ylab = "Distance")
+lines(shepard$x, shepard$yf, type = "S")
 title("Vérification de l'amélioration des données
       par la méthode de Shepard")
 dev.off()
