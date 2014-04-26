@@ -116,4 +116,3 @@ plot(x, inertiesMinimales,
 axis(side = 1, at = seq(0, 10, 1), labels = seq(0, 10, 1))
 dev.off()
 cat("inertiesMinimales.png sauvegardee\n")
-
