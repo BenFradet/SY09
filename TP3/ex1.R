@@ -51,7 +51,6 @@ erreurEstimee <- function(ech, regle, mu1, mu2) {
 }
 
 matrices <- createMatrices(600)
-
 for(i in 1:5) {
     filename <- paste("plot", i, ".png", sep = "")
     png(filename, width = 500, height = 400)
@@ -72,30 +71,47 @@ for(i in 1:5) {
     cat(paste(filename, "sauvegardee\n"))
 }
 
-muMatrices <- list()
-matricesApp <- list()
-matricesTest <- list()
-cat("\nMUS\n")
-cat("mu1 x\t\tmu1 y\t\tmu2 x\t\tmu2 y\n")
-for(i in 1:5) {
-    #shuffle
-    matrices[[i]] <- matrices[[i]][sample(nrow(matrices[[i]])),]
-    matricesApp[[i]] <- matrices[[i]][1:300,]
-    matricesTest[[i]] <- matrices[[i]][301:600,]
-    muMatrices[[2 * i - 1]] <-
-        moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 1,])
-    muMatrices[[2 * i]] <- 
-        moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] ==2 ,])
-    cat(muMatrices[[2 * i - 1]][1], "\t", muMatrices[[2 * i - 1]][2], "\t",
-        muMatrices[[2 * i]][1], "\t", muMatrices[[2 * i]][2], "\n",
-        sep = "")
+repetition <- 10
+probas <- data.frame(matrix(nrow = 5, ncol = repetition),
+                     row.names = c("1,1", "1,5", "1,9", "5,5", "9,9"))
+for(j in 1:repetition) {
+    matrices <- createMatrices(600)
+    mus <- list()
+    matricesApp <- list()
+    matricesTest <- list()
+    cat("\nMUS\n")
+    cat("mu1 x\t\tmu1 y\t\tmu2 x\t\tmu2 y\n")
+    for(i in 1:5) {
+        #shuffle
+        matrices[[i]] <- matrices[[i]][sample(nrow(matrices[[i]])),]
+        matricesApp[[i]] <- matrices[[i]][1:300,]
+        matricesTest[[i]] <- matrices[[i]][301:600,]
+        mus[[2 * i - 1]] <-
+            moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 1,])
+        mus[[2 * i]] <- 
+            moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 2 ,])
+        cat(mus[[2 * i - 1]][1], "\t", mus[[2 * i - 1]][2], "\t",
+            mus[[2 * i]][1], "\t", mus[[2 * i]][2], "\n",
+            sep = "")
+    }
+
+    cat("\nProbabilites d'erreur\n")
+    for(i in 1:5) {
+        proba <- erreurEstimee(matricesTest[[i]],
+                               regleEuclidienne,
+                               mus[[2 * i - 1]],
+                               mus[[2 * i]])
+        cat(proba, "\n")
+        probas[i,j] <- proba
+    }
 }
 
-cat("\nProbabilites d'erreur\n")
-for(i in 1:5) {
-    cat(erreurEstimee(matricesTest[[i]],
-                      regleEuclidienne,
-                      muMatrices[[2 * i -1]],
-                      muMatrices[[2 * i]]),
-        "\n")
-}
+cat("\nprobas\n")
+print(probas)
+cat("\nmeans\n")
+print(apply(probas, 1, mean))
+cat("\nvariances\n")
+print(apply(probas, 1,
+            function(row) {
+                return(sd(row) ^ 2)
+            }))
