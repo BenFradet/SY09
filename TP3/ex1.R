@@ -1,15 +1,4 @@
-library(MASS)
-
-simul <- function(n, pi, mu1, mu2, sigma1, sigma2) {
-    n1 <- rbinom(1, n, pi)
-    n2 <- n - n1
-    d1 <- mvrnorm(n1, mu1, sigma1)
-    d1 <- cbind(d1, matrix(1, nrow = n1))
-    d2 <- mvrnorm(n2, mu2, sigma2)
-    d2 <- cbind(d2, matrix(2, nrow = n2))
-    d <- rbind(d1, d2)
-    return(d)
-}
+source("functions.R", local = T)
 
 createMatrices <- function(n) {
     mats <- list()
@@ -19,12 +8,6 @@ createMatrices <- function(n) {
     mats[[4]] <- simul(n, 0.5, c(0, 0), c(10, 0), 5 * diag(2), 5 * diag(2))
     mats[[5]] <- simul(n, 0.5, c(0, 0), c(10, 0), 9 * diag(2), 9 * diag(2))
     return(mats)
-}
-
-moyenneEmpirique <- function(ech) {
-    xMean <- round(mean(ech[, 1]), digits = 6)
-    yMean <- round(mean(ech[, 2]), digits = 6)
-    return(c(xMean, yMean))
 }
 
 regleEuclidienne <- function(x, mu1, mu2) {
@@ -89,7 +72,7 @@ for(j in 1:repetition) {
         mus[[2 * i - 1]] <-
             moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 1,])
         mus[[2 * i]] <- 
-            moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 2 ,])
+            moyenneEmpirique(matricesApp[[i]][matricesApp[[i]][,3] == 2,])
         cat(mus[[2 * i - 1]][1], "\t", mus[[2 * i - 1]][2], "\t",
             mus[[2 * i]][1], "\t", mus[[2 * i]][2], "\n",
             sep = "")
