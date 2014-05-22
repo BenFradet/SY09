@@ -1,4 +1,19 @@
 source("functions.R", local = T)
+source("circle.R", local = T)
+
+regleBayes <- function(x, a, b) {
+    if(x[2] < a * x[1] + b) {
+        return(1)
+    } else {
+        return(2)
+    }
+}
+
+bindBayes <- function(mat, regle, a, b) {
+    classement <- apply(mat, 1, regle, a = a, b = b)
+    mat <- cbind(mat, classement)
+    return(mat)
+}
 
 for(i in 1:5) {
     mat <- simul(1 * 10 ** i, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
@@ -86,9 +101,6 @@ par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 cat("cas1et2.png sauvegardee\n")
 
-#regle de bayes
-#fonction qui bind nouvelle colonne according to la regle de bayes
-
 mat3 <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
 png("cas3.png", width = 500, height = 400)
 par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
@@ -118,3 +130,61 @@ abline(-log(10) / 2, -1, xpd = F, col = "purple")
 par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 cat("cas3.png sauvegardee\n")
+
+#calcul des estimateurs regle de bayes
+#cas1
+mat <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
+mat <- bindBayes(mat, regleBayes, -1, 0)
+estimateurAlpha <- sum(apply(mat, 1,
+                             function(row) {
+                                 if(row[3] == 1 && row[4] == 2) {
+                                     return(1)
+                                 }
+                                 return(0)
+                             })) / sum(mat[,3] == 1)
+estimateurBeta <- sum(apply(mat, 1,
+                            function(row) {
+                                if(row[3] == 2 && row[4] == 1) {
+                                    return(1)
+                                }
+                                return(0)
+                            })) / sum(mat[,3] == 2)
+cat("cas 1 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
+
+#cas2
+mat <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
+mat <- bindBayes(mat, regleBayes, -1, -log(10) / 2)
+estimateurAlpha <- sum(apply(mat, 1,
+                             function(row) {
+                                 if(row[3] == 1 && row[4] == 2) {
+                                     return(1)
+                                 }
+                                 return(0)
+                             })) / sum(mat[,3] == 1)
+estimateurBeta <- sum(apply(mat, 1,
+                            function(row) {
+                                if(row[3] == 2 && row[4] == 1) {
+                                    return(1)
+                                }
+                                return(0)
+                            })) / sum(mat[,3] == 2)
+cat("cas 2 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
+
+#cas3
+mat <- simul(1000, 1/11, c(-1, -1), c(1, 1), diag(2), diag(2))
+mat <- bindBayes(mat, regleBayes, -1, -log(10) / 2)
+estimateurAlpha <- sum(apply(mat, 1,
+                             function(row) {
+                                 if(row[3] == 1 && row[4] == 2) {
+                                     return(1)
+                                 }
+                                 return(0)
+                             })) / sum(mat[,3] == 1)
+estimateurBeta <- sum(apply(mat, 1,
+                            function(row) {
+                                if(row[3] == 2 && row[4] == 1) {
+                                    return(1)
+                                }
+                                return(0)
+                            })) / sum(mat[,3] == 2)
+cat("cas 3 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
