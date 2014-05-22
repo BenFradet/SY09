@@ -51,18 +51,18 @@ circle(c(1, 1), sqrt(-2 * log(2 * pi * cste * 1 / 3)), border = "blue")
 dev.off()
 cat("cercles.png sauvegardee\n")
 
-mat <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
+mat1 <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
 png("cas1et2.png", width = 500, height = 400)
 par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
 
-plot(mat[,1], mat[,2],
+plot(mat1[,1], mat1[,2],
      main = "",
      xlab = "x1",
      ylab = "x2",
-     pch = c(1, 2)[mat[,3]],
-     col = c("red", "blue")[mat[,3]])
+     pch = c(1, 2)[mat1[,3]],
+     col = c("red", "blue")[mat1[,3]])
 
-legend(max(mat[,1]) + 0.5, max(mat[,2]),
+legend(max(mat1[,1]) + 0.5, max(mat1[,2]),
        c("Classe 1", "Classe 2"),
        col = c("red", "blue"),
        pch = c(1, 2),
@@ -86,18 +86,21 @@ par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 cat("cas1et2.png sauvegardee\n")
 
-mat <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
+#regle de bayes
+#fonction qui bind nouvelle colonne according to la regle de bayes
+
+mat3 <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
 png("cas3.png", width = 500, height = 400)
 par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
 
-plot(mat[,1], mat[,2],
+plot(mat3[,1], mat3[,2],
      main = "",
      xlab = "x1",
      ylab = "x2",
-     pch = c(1, 2)[mat[,3]],
-     col = c("red", "blue")[mat[,3]])
+     pch = c(1, 2)[mat3[,3]],
+     col = c("red", "blue")[mat3[,3]])
 
-legend(max(mat[,1]) + 0.5, max(mat[,2]),
+legend(max(mat3[,1]) + 0.5, max(mat3[,2]),
        c("Classe 1", "Classe 2"),
        col = c("red", "blue"),
        pch = c(1, 2),
