@@ -52,22 +52,9 @@ dev.off()
 cat("cercles.png sauvegardee\n")
 
 mat <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
-png("cas1et2.png", width = 400, height = 400)
-plot(mat[,1], mat[,2],
-     main = "",
-     xlab = "x1",
-     ylab = "y1",
-     pch = c(1, 2)[mat[,3]],
-     col = c("red", "blue")[mat[,3]])
+png("cas1et2.png", width = 500, height = 400)
+par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
 
-abline(h = 0)
-abline(v = 0)
-abline(0, -1)
-abline(-log(10) / 2, -1)
-dev.off()
-
-mat <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
-png("cas3.png", width = 400, height = 400)
 plot(mat[,1], mat[,2],
      main = "",
      xlab = "x1",
@@ -75,7 +62,56 @@ plot(mat[,1], mat[,2],
      pch = c(1, 2)[mat[,3]],
      col = c("red", "blue")[mat[,3]])
 
-abline(h = 0)
-abline(v = 0)
-abline(-log(10) / 2, -1)
+legend(max(mat[,1]) + 0.5, max(mat[,2]),
+       c("Classe 1", "Classe 2"),
+       col = c("red", "blue"),
+       pch = c(1, 2),
+       cex = 0.8)
+
+text(-2, 3,
+     labels = "x2 = -x1",
+     cex = 0.8,
+     col = "purple")
+text(1, -4,
+     labels = "x2 = -x1 - ln(10) / 2",
+     cex = 0.8,
+     col = "aquamarine4")
+
+abline(h = 0, xpd = F)
+abline(v = 0, xpd = F)
+abline(0, -1, xpd = F, col = "purple")
+abline(-log(10) / 2, -1, xpd = F, col = "aquamarine4")
+
+par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
+cat("cas1et2.png sauvegardee\n")
+
+mat <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
+png("cas3.png", width = 500, height = 400)
+par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
+
+plot(mat[,1], mat[,2],
+     main = "",
+     xlab = "x1",
+     ylab = "x2",
+     pch = c(1, 2)[mat[,3]],
+     col = c("red", "blue")[mat[,3]])
+
+legend(max(mat[,1]) + 0.5, max(mat[,2]),
+       c("Classe 1", "Classe 2"),
+       col = c("red", "blue"),
+       pch = c(1, 2),
+       cex = 0.8)
+
+text(3, -3, 
+     labels = "x2 = -x1 - ln(10) / 2", 
+     cex = 0.8, 
+     col = "purple")
+
+abline(h = 0, xpd = F)
+abline(v = 0, xpd = F)
+abline(-log(10) / 2, -1, xpd = F, col = "purple")
+
+par(mar = c(5, 4, 4, 2) + 0.1)
+dev.off()
+cat("cas3.png sauvegardee\n")
