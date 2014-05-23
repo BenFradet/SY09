@@ -45,15 +45,25 @@ for(i in 1:5) {
               sd(mat[mat[,3] == 2,][,1]), sd(mat[mat[,3] == 2,][,2]), "\n"))
 }
 
+#cercles d'iso densite
 #cste <- round(1 / (2 * pi), 2)
 cste <- 0.15
-png("cercles.png", width = 400, height = 400)
+png("cercles.png", width = 500, height = 400)
+par(xpd = T, mar = par()$mar + c(0, 0, 0, 5.5))
 plot(0, 0,
+     main = "Cercles d'iso-densite",
      type = "n",
      xlab = "x1",
      ylab = "x2",
      xlim = c(-3, 3),
      ylim = c(-3, 3))
+legend(3.3, 2.5,
+       c("Classe 1", "Classe 2"),
+       col = c("red", "blue"),
+       lwd = 0.8)
+text(-1.5, 2.5,
+     labels = "x2 = -x1",
+     cex = 0.8)
 
 circle(c(-1, -1), sqrt(-2 * log(2 * pi * cste)), border = "red")
 circle(c(-1, -1), sqrt(-2 * log(2 * pi * cste * 2 / 3)), border = "red")
@@ -63,9 +73,15 @@ circle(c(1, 1), sqrt(-2 * log(2 * pi * cste)), border = "blue")
 circle(c(1, 1), sqrt(-2 * log(2 * pi * cste * 2 / 3)), border = "blue")
 circle(c(1, 1), sqrt(-2 * log(2 * pi * cste * 1 / 3)), border = "blue")
 
+abline(0, -1, xpd = F)
+abline(h = 0, xpd = F)
+abline(v = 0, xpd = F)
+
+par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 cat("cercles.png sauvegardee\n")
 
+#frontieres de decision 1 et 2
 mat1 <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
 png("cas1et2.png", width = 500, height = 400)
 par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
@@ -101,6 +117,7 @@ par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 cat("cas1et2.png sauvegardee\n")
 
+#frontiere de decision 3
 mat3 <- simul(1000, 1 / 11, c(-1, -1), c(1, 1), diag(2), diag(2))
 png("cas3.png", width = 500, height = 400)
 par(xpd = T, mar = par()$mar + c(0, 0, 0, 4))
@@ -149,7 +166,8 @@ estimateurBeta <- sum(apply(mat, 1,
                                 }
                                 return(0)
                             })) / sum(mat[,3] == 2)
-cat("cas 1 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
+cat("cas 1", "n1:", sum(mat[,3] == 1), "n2:", sum(mat[,3] == 2), "alpha:", 
+    estimateurAlpha, "beta:", estimateurBeta, "\n")
 
 #cas2
 mat <- simul(1000, 0.5, c(-1, -1), c(1, 1), diag(2), diag(2))
@@ -168,7 +186,8 @@ estimateurBeta <- sum(apply(mat, 1,
                                 }
                                 return(0)
                             })) / sum(mat[,3] == 2)
-cat("cas 2 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
+cat("cas 2", "n1:", sum(mat[,3] == 1), "n2:", sum(mat[,3] == 2), "alpha:", 
+    estimateurAlpha, "beta:", estimateurBeta, "\n")
 
 #cas3
 mat <- simul(1000, 1/11, c(-1, -1), c(1, 1), diag(2), diag(2))
@@ -187,4 +206,5 @@ estimateurBeta <- sum(apply(mat, 1,
                                 }
                                 return(0)
                             })) / sum(mat[,3] == 2)
-cat("cas 3 alpha:", estimateurAlpha, "beta:", estimateurBeta, "\n")
+cat("cas 3", "n1:", sum(mat[,3] == 1), "n2:", sum(mat[,3] == 2), "alpha:", 
+    estimateurAlpha, "beta:", estimateurBeta, "\n")
