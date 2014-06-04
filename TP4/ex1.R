@@ -140,6 +140,10 @@ for(i in 1:6) {
                 "\tproba erreur qda training:", mean(probaDF$trainingQDA), "\n",
                 "\tproba erreur lda test:", mean(probaDF$testLDA), "\n",
                 "\tproba erreur qda test:", mean(probaDF$testQDA), "\n")
+            if(p == 2/3) {
+                cat("\tvariance lda test:", sd(probaDF$testLDA) ^ 2, "\n",
+                    "\tvariance qda test:", sd(probaDF$testQDA) ^ 2, "\n")
+            }
         }
         cat("\n")
     } else {
@@ -150,6 +154,8 @@ for(i in 1:6) {
             "\tproba erreur lda training:", mean(probaDF$trainingLDA), "\n",
             "\tproba erreur qda training:", mean(probaDF$trainingQDA), "\n",
             "\tproba erreur lda test:", mean(probaDF$testLDA), "\n",
-            "\tproba erreur qda test:", mean(probaDF$testQDA), "\n\n")
+            "\tproba erreur qda test:", mean(probaDF$testQDA), "\n")
+        cat("\tvariance lda test:", sd(probaDF$testLDA) ^ 2, "\n",
+            "\tvariance qda test:", sd(probaDF$testQDA) ^ 2, "\n\n")
     }
 }
