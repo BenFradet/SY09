@@ -8,25 +8,29 @@
 logreg <- function(xapp, zapp, intr, epsi) {
     niter <- 0
     if(intr) {
-        beta <- matrix(0, ncol = 1, nrow = dim(xapp)[2])
-    } else {
         beta <- matrix(0, ncol = 1, nrow = dim(xapp)[2] + 1)
+        xapp <- cbind(rep(1, times = nrow(xapp)), xapp)
+    } else {
+        beta <- matrix(0, ncol = 1, nrow = dim(xapp)[2])
     }
     
     #fill zapp with 1 and 0s
-    zapp <- apply(zapp, 1,
-                  function(row) {
-                      if(zapp[1] == 2) {
-                          zapp[1] = 0
+    zapp <- sapply(zapp,
+                  function(elem) {
+                      if(elem == 2) {
+                          elem = 0
+                      } else {
+                          elem = 1
                       }
                   })
 
     repeat {
-        proba <- exp(xapp %*% beta) / (1 + exp(xapp %*% beta))
-        logl <- t(xapp) %*% (zapp - proba)
-        w <- diag(proba)
-        hess <- -t(xapp) %*% w %*% xapp
-        betaPlus1 <- beta - apply(hess, 2, rev) %*% logl#doute
+        xappMat <- as.matrix(xapp)
+        proba <- exp(xappMat %*% beta) / (1 + exp(xappMat %*% beta))
+        w <- diag(proba[,1])
+        logl <- t(xappMat) %*% (zapp - proba)
+        hess <- -t(xappMat) %*% w %*% xappMat
+        betaPlus1 <- beta - solve(hess) %*% logl#doute
 
         if(intr) {
             if(sqrt((betaPlus1[1] - beta[1]) ^ 2 + 
@@ -36,7 +40,7 @@ logreg <- function(xapp, zapp, intr, epsi) {
                 break
             } else {
                 beta <- betaPlus1
-                niter++;
+                niter <- niter + 1
             }
         } else {
             if(sqrt((betaPlus1[1] - beta[1]) ^ 2 + (betaPlus1[2] - beta[2]) ^ 2) 
@@ -44,7 +48,7 @@ logreg <- function(xapp, zapp, intr, epsi) {
                 break
             } else {
                 beta <- betaPlus1
-                niter++;
+                niter <- niter + 1
             }
         }
     }
@@ -64,7 +68,9 @@ logeva <- function(xtst, beta) {
    probaDF <- data.frame(proba1 = numeric(), proba2 = numeric())
    if(dim(beta)[1] == 3) {
        for(i in 1:nrow(xtst)) {
-           nb <- beta[0] + beta[1] * xtst[i,1] + beta[2] * xtst[i,2]
+           nb <- beta[, 1][[1]] + beta[, 1][[2]] * xtst[i,1] + 
+                beta[, 1][[3]] * xtst[i,2]
+           probaDF <- rbind(probaDF, data.frame(proba1 = 0, proba2 = 0))
            probaDF$proba1[i] <- exp(nb) / (1 + exp(nb))
            probaDF$proba2[i] <- 1 / (1 + exp(nb))
            if(nb >= 0) {
@@ -85,7 +91,7 @@ logeva <- function(xtst, beta) {
            }
        }
    }
-   res <- list
+   res <- list()
    res$deci <- classe
    res$prob <- probaDF
    return(res)
