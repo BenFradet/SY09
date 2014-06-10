@@ -17,7 +17,7 @@ graph <- function(data, filename) {
     qy <- predict(qda, grille)
     qyp <- qy$posterior[,1] - qy$posterior[,2]
 
-    pngname <- paste(filename, ".png", sep = "")
+    pngname <- paste("ex1-", filename, ".png", sep = "")
     png(pngname, width = 500, height = 400)
     par(xpd = T, mar = par()$mar + c(0, 0, 0, 8))
     plot(data[,c(1,2)],
