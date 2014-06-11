@@ -41,21 +41,30 @@ graph <- function(data, filename) {
     cat(paste(pngname, "sauvegardee\n"))
 }
 
+constructDF <- function(data) {
+    data <- cbind(data, data.frame(V1V2 = data[,1] * data[,2]))
+    data <- cbind(data, data.frame(V1V1 = data[,1] * data[,1]))
+    data <- cbind(data, data.frame(V2V2 = data[,2] * data[,2]))
+}
+
 data <- c()
 for(i in 1:4) {
     filename <- paste("data", i, ".txt", sep = "")
     data[[i]] <- read.table(filename)
     graph(data[[i]], filename)
-    lreg <- logreg(data[[i]][,c(1,2)], data[[i]][,3], T, 1e-3)
-    #print(lreg)
-    classes <- logeva(data[[i]][,c(1,2)], lreg$beta)
-    data[[i]] <- cbind(data[[i]], classes$deci)
-    probaErreur <- sum(apply(data[[i]], 1,
-                             function(row) {
-                                 if(row[3] != row[4]) {
-                                     return(1)
-                                 }
-                                 return(0)
-                             })) / nrow(data[[i]])
-    cat(probaErreur, "\n")
+
+    #lreg <- logreg(data[[i]][,c(1,2)], data[[i]][,3], T, 1e-3)
+    #classes <- logeva(data[[i]][,c(1,2)], lreg$beta)
+    #data[[i]] <- cbind(data[[i]], classes$deci)
+    #probaErreur <- sum(apply(data[[i]], 1,
+    #                         function(row) {
+    #                             if(row[3] != row[4]) {
+    #                                 return(1)
+    #                             }
+    #                             return(0)
+    #                         })) / nrow(data[[i]])
+    #cat(probaErreur, "\n")
+
+    data[[i]] <- constructDF(data[[i]])
+    print(head(data[[i]]))
 } 
