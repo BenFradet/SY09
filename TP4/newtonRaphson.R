@@ -30,26 +30,14 @@ logreg <- function(xapp, zapp, intr, epsi) {
         w <- diag(proba[,1])
         logl <- t(xappMat) %*% (zapp - proba)
         hess <- -t(xappMat) %*% w %*% xappMat
-        betaPlus1 <- beta - solve(hess) %*% logl#doute
+        betaPlus1 <- beta - solve(hess) %*% logl
 
-        if(intr) {
-            if(sqrt((betaPlus1[1] - beta[1]) ^ 2 + 
-                    (betaPlus1[2] - beta[2]) ^ 2 +
-                    (betaPlus1[3] - beta[3]) ^ 2)
-               < epsi) {
-                break
-            } else {
-                beta <- betaPlus1
-                niter <- niter + 1
-            }
+        distance <- sqrt(sum((betaPlus1 - beta) ^ 2))
+        if(distance < epsi) {
+            break
         } else {
-            if(sqrt((betaPlus1[1] - beta[1]) ^ 2 + (betaPlus1[2] - beta[2]) ^ 2) 
-               < epsi) {
-                break
-            } else {
-                beta <- betaPlus1
-                niter <- niter + 1
-            }
+            beta <- betaPlus1
+            niter <- niter + 1
         }
     }
     res <- list()
@@ -79,9 +67,38 @@ logeva <- function(xtst, beta) {
                classe[i] <- 2
            }
        }
-   } else {
+   } else if(dim(beta)[1] == 2) {
        for(i in 1:nrow(xtst)) {
            nb <- beta[1] * xtst[i,1] + beta[2] * xtst[i,2]
+           probaDF <- rbind(probaDF, data.frame(proba1 = 0, proba2 = 0))
+           probaDF$proba1[i] <- exp(nb) / (1 + exp(nb))
+           probaDF$proba2[i] <- 1 / (1 + exp(nb))
+           if(nb >= 0) {
+               classe[i] <- 1
+           } else {
+               classe[i] <- 2
+           }
+       }
+   } else if(dim(beta)[1] == 5) {
+       for(i in 1:nrow(xtst)) {
+           nb <- beta[, 1][[1]] * xtst[i,1] + beta[, 1][[2]] * xtst[i,2] + 
+            beta[, 1][[3]] * xtst[i, 3] + beta[, 1][[4]] * xtst[i, 4] +
+            beta[, 1][[5]] * xtst[i, 5]
+           probaDF <- rbind(probaDF, data.frame(proba1 = 0, proba2 = 0))
+           probaDF$proba1[i] <- exp(nb) / (1 + exp(nb))
+           probaDF$proba2[i] <- 1 / (1 + exp(nb))
+           if(nb >= 0) {
+               classe[i] <- 1
+           } else {
+               classe[i] <- 2
+           }
+       }
+   } else {
+       for(i in 1:nrow(xtst)) {
+           nb <- beta[, 1][[1]] +  beta[, 1][[2]]  * xtst[i,1] + 
+            beta[, 1][[3]] * xtst[i,2] + beta[, 1][[4]] * xtst[i, 3] + 
+            beta[, 1][[5]] * xtst[i, 4] + beta[, 1][[6]] * xtst[i, 5]
+           probaDF <- rbind(probaDF, data.frame(proba1 = 0, proba2 = 0))
            probaDF$proba1[i] <- exp(nb) / (1 + exp(nb))
            probaDF$proba2[i] <- 1 / (1 + exp(nb))
            if(nb >= 0) {
