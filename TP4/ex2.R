@@ -103,9 +103,11 @@ for(i in 1:4) {
     for(j in 1:200) {
         m <- rbind(m, probaErreur(data[[i]], 2/3))
     }
-    #variances
-    cat("proba erreur lineaire", mean(m[, 1], na.rm = T), "\n")
-    cat("proba erreur quadratique", mean(m[, 2], na.rm = T), "\n")
+    cat(paste("for", filename, ":\n"))
+    cat("\tproba erreur reg lineaire", mean(m[, 1], na.rm = T), "\n")
+    cat("\tvariance reg lineaire", sd(m[, 1], na.rm = T) ^ 2, "\n")
+    cat("\tproba erreur reg quadratique", mean(m[, 2], na.rm = T), "\n")
+    cat("\tvariance reg quadratique", sd(m[, 2], na.rm = T) ^ 2, "\n\n")
 
     #lreg <- logreg(data[[i]][,c(1,2)], data[[i]][,3], T, 1e-3)
     #classes <- logeva(data[[i]][,c(1,2)], lreg$beta)

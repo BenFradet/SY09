@@ -1,5 +1,4 @@
 library(MASS)
-#library(klaR)
 
 graph <- function(data, filename) {
     len <- dim(data)[1]
